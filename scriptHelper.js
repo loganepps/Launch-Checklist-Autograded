@@ -1,5 +1,4 @@
 // Write your helper functions here!
-
 require("cross-fetch/polyfill");
 
 function addDestinationInfo(
@@ -22,23 +21,9 @@ function addDestinationInfo(
      </ol>
      <img src="${imageUrl}">`;
 }
-// Here is the HTML formatting for our mission target div.
-/*
-                 <h2>Mission Destination</h2>
-                 <ol>
-                     <li>Name: </li>
-                     <li>Diameter: </li>
-                     <li>Star: ${star}</li>
-                     <li>Distance from Earth: </li>
-                     <li>Number of Moons: </li>
-                 </ol>
-                 <img src="">
-    */
-// }
 
 function validateInput(testInput) {
   if (testInput === "") {
-    // alert("All fields are required!");
     return "Empty";
   } else if (isNaN(testInput)) {
     return "Not a Number";
@@ -47,7 +32,32 @@ function validateInput(testInput) {
   }
 }
 
-function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
+function formSubmission(document, list, pilot, copilot, fuelLevel, cargoMass) {
+  //use validateInput() to validate those inputs
+  if (
+    validateInput(pilot) === "Empty" ||
+    validateInput(copilot) === "Empty" ||
+    validateInput(fuelLevel) === "Empty" ||
+    validateInput(cargoMass) === "Empty"
+  ) {
+    alert("All fields are required!");
+    return;
+  }
+  if (
+    validateInput(fuelLevel) === "Not a Number" ||
+    validateInput(cargoMass) === "Not a Number"
+  ) {
+    alert("Fuel Level and Cargo Mass must be numbers!");
+    return;
+  }
+  if (
+    validateInput(pilot) === "Is a Number" ||
+    validateInput(copilot) === "Is a Number"
+  ) {
+    alert("Pilot and Co-pilot names can't be numbers!");
+    return;
+  }
+
   let h2 = document.getElementById("launchStatus");
   let pilotStatus = document.getElementById("pilotStatus");
   let copilotStatus = document.getElementById("copilotStatus");
@@ -56,7 +66,8 @@ function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
   let minFuel = 10000;
   let maxWeight = 10000;
 
-  if (fuelLevel < minFuel || cargoLevel > maxWeight) {
+  // update list to show whether or not we are ready for launch
+  if (fuelLevel < minFuel || cargoMass > maxWeight) {
     list.style.visibility = "visible";
     h2.innerHTML = "Shuttle Not Ready for Launch";
     h2.style.color = "red";
@@ -65,16 +76,17 @@ function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
     h2.innerHTML = "Shuttle is Ready for Launch";
     h2.style.color = "green";
   }
-
+  // update pilotStatus and copilotStatus elements
   pilotStatus.innerHTML = `Pilot ${pilot} is ready for launch`;
   copilotStatus.innerHTML = `Co-pilot ${copilot} is ready for launch`;
-
+  // update fuelStatus element
   if (fuelLevel < minFuel) {
     fuelStatus.innerHTML = "Fuel level too low for launch";
   } else {
     fuelStatus.innerHTML = "Fuel level high enough for launch";
   }
-  if (cargoLevel > maxWeight) {
+  // update cargoStatus element
+  if (cargoMass > maxWeight) {
     cargoStatus.innerHTML = "Cargo mass too heavy for launch";
   } else {
     cargoStatus.innerHTML = "Cargo mass low enough for launch";
@@ -84,12 +96,19 @@ function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
 async function myFetch() {
   let planetsReturned;
 
-  planetsReturned = await fetch().then(function (response) {});
+  planetsReturned = await fetch(
+    "https://handlers.education.launchcode.org/static/planets.json"
+  ).then(function (response) {
+    return response.json();
+  });
 
   return planetsReturned;
 }
 
-function pickPlanet(planets) {}
+function pickPlanet(planets) {
+  let randomPlanetIndex = Math.floor(Math.random() * planets.length);
+  return planets[randomPlanetIndex];
+}
 
 module.exports.addDestinationInfo = addDestinationInfo;
 module.exports.validateInput = validateInput;
