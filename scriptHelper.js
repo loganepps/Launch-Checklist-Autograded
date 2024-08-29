@@ -1,4 +1,3 @@
-// Write your helper functions here!
 require("cross-fetch/polyfill");
 
 function addDestinationInfo(
@@ -33,7 +32,6 @@ function validateInput(testInput) {
 }
 
 function formSubmission(document, list, pilot, copilot, fuelLevel, cargoMass) {
-  //use validateInput() to validate those inputs
   if (
     validateInput(pilot) === "Empty" ||
     validateInput(copilot) === "Empty" ||
@@ -66,7 +64,6 @@ function formSubmission(document, list, pilot, copilot, fuelLevel, cargoMass) {
   let minFuel = 10000;
   let maxWeight = 10000;
 
-  // update list to show whether or not we are ready for launch
   if (fuelLevel < minFuel || cargoMass > maxWeight) {
     list.style.visibility = "visible";
     h2.innerHTML = "Shuttle Not Ready for Launch";
@@ -76,16 +73,16 @@ function formSubmission(document, list, pilot, copilot, fuelLevel, cargoMass) {
     h2.innerHTML = "Shuttle is Ready for Launch";
     h2.style.color = "green";
   }
-  // update pilotStatus and copilotStatus elements
+
   pilotStatus.innerHTML = `Pilot ${pilot} is ready for launch`;
   copilotStatus.innerHTML = `Co-pilot ${copilot} is ready for launch`;
-  // update fuelStatus element
+
   if (fuelLevel < minFuel) {
     fuelStatus.innerHTML = "Fuel level too low for launch";
   } else {
     fuelStatus.innerHTML = "Fuel level high enough for launch";
   }
-  // update cargoStatus element
+
   if (cargoMass > maxWeight) {
     cargoStatus.innerHTML = "Cargo mass too heavy for launch";
   } else {
